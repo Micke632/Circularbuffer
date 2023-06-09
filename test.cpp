@@ -3,6 +3,15 @@
 TEST(TestCaseName, test)
 {
 
+    struct Node final
+    {
+    private:
+
+    public:
+        int visited;
+        int loaded;
+    };
+
     {
 
         //modulo
