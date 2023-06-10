@@ -8,7 +8,7 @@ circular_queue<T, 50>   q;
 
 Circularbuffer . can be used with fast & operation (power of two).
 size -1 can be used internally.
-circular_queue<T,false,32>   q;
+circular_queue<T, 32, false>   q;
 
 */
 
@@ -32,8 +32,8 @@ class circular_queue
         {
             return value & m_max_items_minus_one;
         }
-
-        static constexpr size_t max_items = s;
+        static_assert(!(s  & (s - 1)));     //must be power of 2
+        static constexpr size_type max_items = s;
     };
 
     struct modulo
@@ -42,8 +42,10 @@ class circular_queue
         {
             return value % max_items;
         }
+        
+        static constexpr size_type max_items = m_max_items;
 
-        static constexpr size_t max_items = m_max_items;
+        
     };
 
     template<bool>
@@ -57,7 +59,7 @@ class circular_queue
     template<>
     struct PolicySelector<false>
     {
-        static_assert(!(s & (s - 1)));     //must be power of 2
+      
         typedef power_of_two type;
     };
 
@@ -71,8 +73,8 @@ public:
     {
     }
 
-    circular_queue(const circular_queue &) = delete;
-    circular_queue &operator=(const circular_queue &) = delete;
+    circular_queue(const circular_queue &) = default;
+    circular_queue &operator=(const circular_queue &) = default;
     circular_queue(circular_queue &&other) = delete;
     circular_queue &operator=(circular_queue &&other) = delete;
 
